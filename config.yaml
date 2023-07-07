@@ -1,0 +1,23 @@
+http:
+  port: 8081
+  middlewares:
+    - name: cors
+    - name: logging
+  endpoints:
+    - id: api-service
+      targets:
+        - uri: http://127.0.0.1:8000
+          weight: 100
+        - uri: http://127.0.0.1:8001
+          weight: 300
+        - uri: http://127.0.0.1:8002
+          weight: 600
+      protocol: http
+      timeout: 2000
+      predicates:
+        path: test-service/*
+        method: GET
+      middlewares:
+        - name: stripPrefix
+          args:
+            call: 1
